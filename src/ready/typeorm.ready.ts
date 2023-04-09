@@ -7,7 +7,7 @@ import { UserDao } from '../dao/user.dao';
 export class TypeormInit extends UserDao {
   @Init()
   async init() {
-    const user = await this.findUser(
+    const { list } = await this.findAndCountUser(
       {
         username: 'admin',
       },
@@ -17,13 +17,14 @@ export class TypeormInit extends UserDao {
       }
     );
 
-    if (user) {
+    if (list.length > 0) {
       return;
     }
 
     this.saveUser({
       username: 'admin',
       password: '123456',
+      role: '2',
     });
   }
 }

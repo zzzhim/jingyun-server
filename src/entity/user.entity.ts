@@ -24,10 +24,10 @@ export class UserModel {
   avatar?: string;
 
   @Column({ default: '0', nullable: true }) // 0 - 保密 1 - 女 2 - 男
-  sex?: string;
+  sex?: '0' | '1' | '2';
 
   @Column({ default: '0' }) // 0 - user 1 - admin 2 - super admin
-  role?: string;
+  role?: '0' | '1' | '2';
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -20,7 +20,7 @@ export class UserDao {
   }
 
   // 查询
-  async findUser(query: UserModel, select: FindOptionsSelect<UserModel>) {
+  async findUser(query: UserModel, select?: FindOptionsSelect<UserModel>) {
     // 查询单个
     const User = await this.UserModel.findOne({
       select,
@@ -31,5 +31,19 @@ export class UserDao {
   }
 
   // 查询所有
-  async findAllUser() {}
+  async findAndCountUser(
+    query: UserModel,
+    select?: FindOptionsSelect<UserModel>
+  ) {
+    // 查询所有
+    const [User, count] = await this.UserModel.findAndCount({
+      select,
+      where: query,
+    });
+
+    return {
+      list: User,
+      total: count,
+    };
+  }
 }
