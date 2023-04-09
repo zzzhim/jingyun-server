@@ -1,4 +1,4 @@
-import { Inject, Controller, Get, Query } from '@midwayjs/core';
+import { Inject, Controller, Post, Body } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { LoginService } from '../../service/admin/login.service';
 
@@ -10,9 +10,11 @@ export class LoginController {
   @Inject()
   loginService: LoginService;
 
-  @Get('/')
-  async getUser(@Query('username') username) {
-    const user = await this.loginService.getUser({ username });
+  @Post('/')
+  async getUser(@Body('username') username) {
+    const user = await this.loginService.getUser({
+      username,
+    });
     return { success: true, message: 'OK', data: user };
   }
 }

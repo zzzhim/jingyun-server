@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  VirtualColumn,
 } from 'typeorm';
 import { EntityModel } from '@midwayjs/orm';
 
@@ -19,6 +20,13 @@ export class UserModel {
 
   @Column({ nullable: false })
   password?: string;
+
+  @VirtualColumn({
+    query: (alias: string) => {
+      return `${alias}.id`;
+    },
+  })
+  token?: string;
 
   @Column({ nullable: true })
   avatar?: string;
