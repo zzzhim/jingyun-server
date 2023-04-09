@@ -1,49 +1,43 @@
+// src/model/user.ts
 import {
-  PrimaryGeneratedColumn,
+  Table,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  VirtualColumn,
-} from 'typeorm';
-import { EntityModel } from '@midwayjs/orm';
+  Model,
+  DataType,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
 
-@EntityModel('user', {})
-export class UserModel {
-  @PrimaryGeneratedColumn()
+@Table({ tableName: 'users' })
+export class UserModel extends Model {
+  @Column({
+    type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  })
   id?: number;
 
-  @Column({ unique: true })
+  @Column({ type: DataType.STRING, unique: true })
   username?: string;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ type: DataType.STRING, unique: true, allowNull: true })
   email?: string;
 
-  @Column({ nullable: false })
+  @Column({ type: DataType.STRING, allowNull: false })
   password?: string;
 
-  @VirtualColumn({
-    query: (alias: string) => {
-      return `${alias}.id`;
-    },
-  })
-  token?: string;
-
-  @Column({ nullable: true })
+  @Column({ type: DataType.STRING, allowNull: true })
   avatar?: string;
 
-  @Column({ default: '0', nullable: true }) // 0 - 保密 1 - 女 2 - 男
+  @Column({ type: DataType.STRING, allowNull: true, defaultValue: '0' }) // 0 - 保密 1 - 女 2 - 男
   sex?: '0' | '1' | '2';
 
-  @Column({ default: '0' }) // 0 - user 1 - admin 2 - super admin
+  @Column({ type: DataType.STRING, allowNull: false, defaultValue: '0' }) // 0 - user 1 - admin 2 - super admin
   role?: '0' | '1' | '2';
 
-  @CreateDateColumn({
-    type: 'timestamp',
-  })
-  created_at?: Date;
+  @CreatedAt
+  createdAt?: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-  })
-  updated_at?: Date;
+  @UpdatedAt
+  updatedAt?: Date;
 }

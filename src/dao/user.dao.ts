@@ -1,29 +1,29 @@
-import { Provide } from '@midwayjs/core';
-import { InjectEntityModel } from '@midwayjs/typeorm';
-import { FindOptionsSelect, Repository } from 'typeorm';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { UserModel } from '../entity/user.entity';
+import { FindAttributeOptions, WhereOptions } from 'sequelize';
+import { CreateUserDto } from '../types/dao/user.type';
 
 @Provide()
+@Scope(ScopeEnum.Singleton)
 export class UserDao {
-  @InjectEntityModel(UserModel)
-  UserModel: Repository<UserModel>;
+  // 创建
+  async saveUser(params: CreateUserDto) {
+    // 创建实体 & 保存
+    const user = await UserModel.create({
+      ...params,
+    });
 
-  // 保存
-  async saveUser(params: UserModel) {
-    // 创建实体
-    const User = new UserModel();
-
-    // 保存实体
-    const UserResult = await this.UserModel.save(Object.assign(User, params));
-
-    return UserResult;
+    return user;
   }
 
   // 查询
-  async findUser(query: UserModel, select?: FindOptionsSelect<UserModel>) {
+  async findUser(
+    query: WhereOptions<UserModel>,
+    attributes?: FindAttributeOptions
+  ) {
     // 查询单个
-    const User = await this.UserModel.findOne({
-      select,
+    const User = await UserModel.findOne({
+      attributes,
       where: query,
     });
 
@@ -32,17 +32,17 @@ export class UserDao {
 
   // 查询所有
   async findAndCountUser(
-    query: UserModel,
-    select?: FindOptionsSelect<UserModel>
+    query: WhereOptions<UserModel>,
+    attributes?: FindAttributeOptions
   ) {
     // 查询所有
-    const [User, count] = await this.UserModel.findAndCount({
-      select,
+    const { rows, count } = await UserModel.findAndCountAll({
+      attributes,
       where: query,
     });
 
     return {
-      list: User,
+      list: rows,
       total: count,
     };
   }

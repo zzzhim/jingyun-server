@@ -6,24 +6,21 @@ export default {
   koa: {
     port: 7001,
   },
-  typeorm: {
+  sequelize: {
     dataSource: {
+      // 第一个数据源，数据源的名字可以完全自定义
       default: {
-        /**
-         * 单数据库实例
-         */
-        type: 'mysql',
-        host: 'localhost',
-        port: 3306,
         username: 'root',
         password: 'wangyafei1007!',
         database: 'jingyun_server',
-        synchronize: true, // 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
-        logging: false,
-
-        // 配置实体模型
-        // entities: [Photo],
-
+        host: 'localhost',
+        port: 3306,
+        encrypt: false,
+        dialect: 'mysql',
+        define: { charset: 'utf8' },
+        timezone: '+08:00',
+        // 本地的时候，可以通过 sync: true 直接 createTable
+        sync: true,
         // 或者扫描形式
         entities: ['**/entity/*.entity{.ts,.js}'],
       },

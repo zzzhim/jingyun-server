@@ -4,18 +4,10 @@ import { UserDao } from '../dao/user.dao';
 
 @Autoload()
 @Scope(ScopeEnum.Singleton)
-export class TypeormInit extends UserDao {
+export class SequelizeInit extends UserDao {
   @Init()
   async init() {
-    const { list } = await this.findAndCountUser(
-      {
-        username: 'admin',
-      },
-      {
-        id: true,
-        username: true,
-      }
-    );
+    const { list } = await this.findAndCountUser({}, ['id']);
 
     if (list.length > 0) {
       return;
