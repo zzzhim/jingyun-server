@@ -24,4 +24,5 @@ export enum ErrorCode {
   USER_NOT_FOUND = 1008, // 用户未找到
   INSUFFICIENT_PERMISSIONS = 1009, // 权限不足
   RATE_LIMIT_EXCEEDED = 1010, // 超过速率限制
+  CAPTCHA_ERROR = 1011, // 验证码错误
 }

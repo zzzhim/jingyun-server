@@ -26,4 +26,5 @@ export const ErrorMessage = {
   [ErrorCode.USER_NOT_FOUND]: '用户未找到',
   [ErrorCode.INSUFFICIENT_PERMISSIONS]: '权限不足',
   [ErrorCode.RATE_LIMIT_EXCEEDED]: '超过速率限制',
+  [ErrorCode.CAPTCHA_ERROR]: '验证码错误',
 };

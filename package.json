@@ -15,7 +15,7 @@
     "@midwayjs/orm": "^3.4.3",
     "@midwayjs/sequelize": "^3.11.3",
     "@midwayjs/session": "^3.11.3",
-    "@midwayjs/validate": "^3.0.0",
+    "@midwayjs/validate": "^3.11.3",
     "glob": "^10.0.0",
     "md5": "^2.3.0",
     "mysql2": "^3.2.0",
