@@ -8,13 +8,13 @@
     "@midwayjs/core": "^3.0.0",
     "@midwayjs/decorator": "^3.0.0",
     "@midwayjs/info": "^3.0.0",
-    "@midwayjs/koa": "^3.0.0",
+    "@midwayjs/koa": "^3.11.3",
     "@midwayjs/logger": "^2.14.0",
     "@midwayjs/orm": "^3.4.3",
     "@midwayjs/sequelize": "^3.11.3",
     "@midwayjs/validate": "^3.0.0",
     "mysql2": "^3.2.0",
-    "sequelize": "^6.30.0",
+    "sequelize": "^6.31.0",
     "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {

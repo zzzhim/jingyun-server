@@ -6,7 +6,10 @@ import {
   DataType,
   CreatedAt,
   UpdatedAt,
+  BelongsTo,
+  ForeignKey,
 } from 'sequelize-typescript';
+import { RoleModel } from './role.model';
 
 @Table({ tableName: 'users' })
 export class UserModel extends Model {
@@ -32,12 +35,17 @@ export class UserModel extends Model {
   @Column({ type: DataType.STRING, allowNull: true, defaultValue: '0' }) // 0 - 保密 1 - 女 2 - 男
   sex?: '0' | '1' | '2';
 
-  @Column({ type: DataType.STRING, allowNull: false, defaultValue: '0' }) // 0 - user 1 - admin 2 - super admin
-  role?: '0' | '1' | '2';
+  @ForeignKey(() => RoleModel)
+  role_id?: number;
+
+  // @Column({ type: DataType.STRING, allowNull: false, defaultValue: '0' }) // 0 - user 1 - admin 2 - super admin
+  // role?: '0' | '1' | '2';
+  @BelongsTo(() => RoleModel)
+  role?: RoleModel;
 
   @CreatedAt
-  createdAt?: Date;
+  created_at?: Date;
 
   @UpdatedAt
-  updatedAt?: Date;
+  updated_at?: Date;
 }

@@ -1,42 +1,42 @@
 import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
-import { UserModel } from '../model/user.model';
+import { RoleModel } from '../model/role.model';
 import { FindAttributeOptions, WhereOptions } from 'sequelize';
-import { CreateUserDto } from '../types/dao/user.type';
+import { CreateRoleDto } from '../types/dao/role.type';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class UserDao {
+export class RoleDao {
   // 创建
-  async saveUser(params: CreateUserDto) {
+  async saveRole(params: CreateRoleDto) {
     // 创建实体 & 保存
-    const user = await UserModel.create({
+    const role = await RoleModel.create({
       ...params,
     });
 
-    return user;
+    return role;
   }
 
   // 查询
-  async findUser(
-    query: WhereOptions<UserModel>,
+  async findRole(
+    query: WhereOptions<RoleModel>,
     attributes?: FindAttributeOptions
   ) {
     // 查询单个
-    const User = await UserModel.findOne({
+    const role = await RoleModel.findOne({
       attributes,
       where: query,
     });
 
-    return User;
+    return role;
   }
 
   // 查询所有
-  async findAndCountUser(
-    query: WhereOptions<UserModel>,
+  async findAndCountRole(
+    query: WhereOptions<RoleModel>,
     attributes?: FindAttributeOptions
   ) {
     // 查询所有
-    const { rows, count } = await UserModel.findAndCountAll({
+    const { rows, count } = await RoleModel.findAndCountAll({
       attributes,
       where: query,
     });

@@ -1,6 +1,6 @@
 import { Provide } from '@midwayjs/core';
 import { UserDao } from '../../dao/user.dao';
-import { UserModel } from '../../entity/user.entity';
+import { UserModel } from '../../model/user.model';
 import { FindAttributeOptions, WhereOptions } from 'sequelize';
 
 @Provide()

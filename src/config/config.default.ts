@@ -22,7 +22,7 @@ export default {
         // 本地的时候，可以通过 sync: true 直接 createTable
         sync: true,
         // 或者扫描形式
-        entities: ['**/entity/*.entity{.ts,.js}'],
+        entities: ['**/model/*.model{.ts,.js}'],
       },
     },
   },

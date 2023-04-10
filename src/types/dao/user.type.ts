@@ -1,3 +1,5 @@
+import { RoleModel } from '../../model/role.model';
+
 export interface CreateUserDto {
   id?: number;
   username?: string;
@@ -5,7 +7,8 @@ export interface CreateUserDto {
   email?: string;
   avatar?: string;
   sex?: '0' | '1' | '2';
-  role?: '0' | '1' | '2';
-  createdAt?: number;
-  updatedAt?: number;
+  role_id?: number;
+  role?: RoleModel;
+  created_at?: Date;
+  updated_at?: Date;
 }
