@@ -34,4 +34,10 @@ export default {
     }),
     expiresIn: '2d', // https://github.com/vercel/ms
   },
+  validate: {
+    validationOptions: {
+      allowUnknown: true, // 全局生效
+      stripUnknown: true, // 全局生效
+    },
+  },
 } as MidwayConfig;

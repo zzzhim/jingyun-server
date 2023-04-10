@@ -7,13 +7,13 @@ import * as jwt from '@midwayjs/jwt';
 import * as captcha from '@midwayjs/captcha';
 import * as session from '@midwayjs/session';
 import { join } from 'path';
-// import { DefaultErrorFilter } from './filter/default.filter';
-// import { NotFoundFilter } from './filter/notfound.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { initializePermissions } from './utils/permissionInitializer';
 import { GlobalErrorMiddleware } from './middleware/globalError.middleware';
 import { MemorySessionStore } from './store/session.store';
+import { NotFoundFilter } from './filter/notfound.filter';
+import { DefaultErrorFilter } from './filter/default.filter';
 
 @Configuration({
   imports: [
@@ -51,7 +51,7 @@ export class ContainerLifeCycle {
     // 当服务器启动时，initializePermissions函数将遍历所有控制器文件并将权限插入到数据库中。
     await initializePermissions();
     // add filter
-    // this.app.useFilter([NotFoundFilter, DefaultErrorFilter]);
+    this.app.useFilter([NotFoundFilter, DefaultErrorFilter]);
 
     this.sessionStoreManager.setSessionStore(this.memoryStore);
   }
