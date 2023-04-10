@@ -1,5 +1,6 @@
 import { Autoload, Scope, ScopeEnum } from '@midwayjs/core';
 import { Init } from '@midwayjs/decorator';
+import * as md5 from 'md5';
 import { RoleModel } from '../model/role.model';
 import { UserModel } from '../model/user.model';
 // import { RoleModel } from '../model/role.model';
@@ -55,9 +56,11 @@ export class SequelizeInit {
         return;
       }
 
+      const password = md5('123456');
+
       await UserModel.create({
         username: 'admin',
-        password: '123456',
+        password: password,
         role_id: role.id,
       });
     }

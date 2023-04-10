@@ -1,4 +1,4 @@
-import { Configuration, App } from '@midwayjs/core';
+import { Configuration, App, Inject } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as validate from '@midwayjs/validate';
 import * as info from '@midwayjs/info';
@@ -11,6 +11,9 @@ import { ReportMiddleware } from './middleware/report.middleware';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { initializePermissions } from './utils/permissionInitializer';
 import { GlobalErrorMiddleware } from './middleware/globalError.middleware';
+import * as captcha from '@midwayjs/captcha';
+import * as session from '@midwayjs/session';
+import { MemorySessionStore } from './store/session.store';
 
 @Configuration({
   imports: [
@@ -18,6 +21,8 @@ import { GlobalErrorMiddleware } from './middleware/globalError.middleware';
     validate,
     sequelize, // 加载 sequelize 组件
     jwt, // 加载 jwt 组件
+    captcha, // 加载 captcha 组件
+    session, // 加载 session 组件
     {
       component: info,
       enabledEnvironment: ['local'],
@@ -28,6 +33,12 @@ import { GlobalErrorMiddleware } from './middleware/globalError.middleware';
 export class ContainerLifeCycle {
   @App()
   app: koa.Application;
+
+  @Inject()
+  memoryStore: MemorySessionStore;
+
+  @Inject()
+  sessionStoreManager: session.SessionStoreManager;
 
   async onReady() {
     // add middleware
@@ -41,5 +52,7 @@ export class ContainerLifeCycle {
     await initializePermissions();
     // add filter
     // this.app.useFilter([NotFoundFilter, DefaultErrorFilter]);
+
+    this.sessionStoreManager.setSessionStore(this.memoryStore);
   }
 }
