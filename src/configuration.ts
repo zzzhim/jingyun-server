@@ -7,6 +7,8 @@ import { join } from 'path';
 // import { NotFoundFilter } from './filter/notfound.filter';
 import { ReportMiddleware } from './middleware/report.middleware';
 import * as sequelize from '@midwayjs/sequelize';
+import { AuthMiddleware } from './middleware/auth.middleware';
+import { initializePermissions } from './utils/permissionInitializer';
 
 @Configuration({
   imports: [
@@ -29,5 +31,9 @@ export class ContainerLifeCycle {
     this.app.useMiddleware([ReportMiddleware]);
     // add filter
     // this.app.useFilter([NotFoundFilter, DefaultErrorFilter]);
+
+    // 当服务器启动时，initializePermissions函数将遍历所有控制器文件并将权限插入到数据库中。
+    this.app.useMiddleware(AuthMiddleware);
+    await initializePermissions();
   }
 }
