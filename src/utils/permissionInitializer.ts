@@ -6,7 +6,7 @@ import { PermissionMetadataKey } from '../decorator/permission.decorator';
 export async function initializePermissions() {
   const controllersPattern = path.join(
     __dirname,
-    '../controller/**/**.controller.ts'
+    '../controller/**/*.controller.ts'
   );
 
   const files = glob.sync(path.normalize(controllersPattern), {
@@ -19,15 +19,15 @@ export async function initializePermissions() {
 
     for (const exportedValue of Object.values(controllerModule)) {
       if (typeof exportedValue === 'function') {
-        const controller = new exportedValue.prototype.constructor();
+        const controllerPrototype = exportedValue.prototype;
         const methodNames = Object.getOwnPropertyNames(
-          exportedValue.prototype
+          controllerPrototype
         ).filter(methodName => methodName !== 'constructor');
 
         for (const methodName of methodNames) {
           const permission = Reflect.getMetadata(
             PermissionMetadataKey,
-            controller,
+            controllerPrototype,
             methodName
           );
 

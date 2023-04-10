@@ -1,15 +1,40 @@
-import { Provide } from '@midwayjs/decorator';
-import { NextFunction, Context } from '@midwayjs/koa';
+import { Middleware, Inject, MidwayWebRouterService } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
 import { UserModel } from '../model/user.model';
 import { RoleModel } from '../model/role.model';
 import { RolePermissionModel } from '../model/role_permission.model';
 import { PermissionModel } from '../model/permission.model';
 import { PermissionMetadataKey } from '../decorator/permission.decorator';
+import { ErrorCode } from '../types/response/code.error';
+import { createResponse } from '../utils/response';
+import { ErrorMessage } from '../types/response/message.error';
 
-@Provide()
+@Middleware()
 export class AuthMiddleware {
+  @Inject()
+  webRouterService: MidwayWebRouterService;
+
   async resolve() {
-    return async (ctx: Context, next: NextFunction) => {
+    return async (ctx: Context, next: () => Promise<any>) => {
+      // 查询当前路由是否在路由表中注册
+      const routeInfo = await this.webRouterService.getMatchedRouterInfo(
+        ctx.path,
+        ctx.method
+      );
+
+      // 如果没有注册权限，直接放行
+      const requiredPermission = Reflect.getMetadata(
+        PermissionMetadataKey,
+        routeInfo.controllerClz.prototype,
+        routeInfo.method as string
+      );
+
+      // 没有权限要求，直接放行
+      if (!requiredPermission) {
+        await next();
+        return;
+      }
+
       // 从请求头中获取用户ID
       const userId = ctx.get('user-id');
 
@@ -34,25 +59,30 @@ export class AuthMiddleware {
       });
 
       if (!user) {
-        ctx.status = 401;
-        ctx.body = { message: 'User not found' };
+        ctx.status = ErrorCode.UNAUTHORIZED;
+        ctx.body = createResponse(
+          null,
+          false,
+          ctx.status,
+          ErrorMessage[ctx.status]
+        );
         return;
       }
 
-      // 检查是否有访问权限
+      // 获取用户权限列表
       const permissions = user.role.role_permissions.map(
         rolePermission => rolePermission.permission.name
-      );
-      const requiredPermission = Reflect.getMetadata(
-        PermissionMetadataKey,
-        ctx._matchedRoute.controller[ctx.routerName].prototype,
-        ctx.routerName
       );
 
       // 如果有权限要求，但是用户没有权限
       if (requiredPermission && !permissions.includes(requiredPermission)) {
-        ctx.status = 403;
-        ctx.body = { message: 'Forbidden' };
+        ctx.status = ErrorCode.UNAUTHORIZED;
+        ctx.body = createResponse(
+          null,
+          false,
+          ctx.status,
+          ErrorMessage[ctx.status]
+        );
         return;
       }
 
