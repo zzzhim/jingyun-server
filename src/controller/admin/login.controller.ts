@@ -1,8 +1,9 @@
 import { Inject, Controller, Post, Body } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { LoginService } from '../../service/admin/login.service';
-import { Permission } from '../../decorator/permission.decorator';
+// import { Permission } from '../../decorator/permission.decorator';
 import { createResponse } from '../../utils/response';
+import { Authorization } from '../../decorator/authorization.decorator';
 
 @Controller('/api/admin/login')
 export class LoginController {
@@ -13,22 +14,21 @@ export class LoginController {
   loginService: LoginService;
 
   @Post('/')
-  @Permission('access_login') // 这里的权限名字是随便起的，只要和数据库中的权限名字一致就行
-  async getUser(@Body('username') username) {
-    const user = await this.loginService.getUser({
-      username,
-    });
+  @Authorization(false)
+  // @Permission('access_login')
+  async login(@Body('username') username, @Body('password') password) {
+    const user = await this.loginService.login(username, password);
 
     return createResponse(user);
   }
 
-  @Post('/register')
-  @Permission('access_register') // 这里的权限名字是随便起的，只要和数据库中的权限名字一致就行
-  async registerUser(@Body('username') username) {
-    const user = await this.loginService.getUser({
-      username,
-    });
+  // @Post('/register')
+  // @Permission('access_register')
+  // async registerUser(@Body('username') username) {
+  //   const user = await this.loginService.getUser({
+  //     username,
+  //   });
 
-    return createResponse(user);
-  }
+  //   return createResponse(user);
+  // }
 }

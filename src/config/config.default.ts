@@ -1,4 +1,6 @@
 import { MidwayConfig } from '@midwayjs/core';
+import { readFileSync } from 'fs';
+import path = require('path');
 
 export default {
   // use for cookie sign key, should change to your own and keep security
@@ -25,5 +27,11 @@ export default {
         entities: ['**/model/*.model{.ts,.js}'],
       },
     },
+  },
+  jwt: {
+    secret: readFileSync(path.join(__dirname, '../../secret.key'), {
+      encoding: 'utf-8',
+    }),
+    expiresIn: '2d', // https://github.com/vercel/ms
   },
 } as MidwayConfig;

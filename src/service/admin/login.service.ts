@@ -1,28 +1,35 @@
-import { Provide } from '@midwayjs/core';
-import { UserDao } from '../../dao/user.dao';
+import { Provide, Inject } from '@midwayjs/core';
 import { UserModel } from '../../model/user.model';
-import { FindAttributeOptions, WhereOptions } from 'sequelize';
+import { JwtService } from '@midwayjs/jwt';
 
 @Provide()
-export class LoginService extends UserDao {
-  async getUser(
-    query: WhereOptions<UserModel>,
-    attributes?: FindAttributeOptions
-  ) {
-    const user = await this.findUser(query, attributes);
+export class LoginService {
+  @Inject()
+  jwtService: JwtService;
 
-    return user;
-  }
+  async login(username: string, password: string) {
+    const user = await UserModel.findOne({
+      where: {
+        username,
+        password,
+      },
+    });
 
-  async getUserList(
-    query: WhereOptions<UserModel>,
-    attributes?: FindAttributeOptions
-  ) {
-    const { list, total } = await this.findAndCountUser(query, attributes);
+    if (!user) {
+      return null;
+    }
+
+    const result = user.toJSON() as UserModel;
+
+    delete result.password;
+
+    const token = this.jwtService.signSync({
+      ...result,
+    });
 
     return {
-      list,
-      total,
+      ...result,
+      token,
     };
   }
 }
