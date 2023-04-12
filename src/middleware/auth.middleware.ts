@@ -110,6 +110,11 @@ export class AuthMiddleware {
       ],
     });
 
+    // 超级管理员直接放行
+    if (user?.role?.name === 'superadmin') {
+      return true;
+    }
+
     if (!user) {
       this.response(ctx, ErrorCode.INSUFFICIENT_PERMISSIONS);
       return;

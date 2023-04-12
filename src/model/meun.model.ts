@@ -30,6 +30,12 @@ export class MenuModel extends Model<MenuModel> {
   name: string;
 
   @Column({
+    type: DataType.STRING(50),
+    comment: '菜单图标',
+  })
+  icon: string;
+
+  @Column({
     type: DataType.STRING(100),
     allowNull: false,
     comment: '菜单链接',
@@ -37,11 +43,11 @@ export class MenuModel extends Model<MenuModel> {
   url: string;
 
   @Column({
-    type: DataType.ENUM('0', '1'), // 0 - 主菜单 1 - 子菜单
+    type: DataType.ENUM('0', '1', '2'), // 0 - 主菜单 1 - 子菜单 2 - 按钮
     allowNull: false,
     comment: '菜单类型',
   })
-  type: '0' | '1';
+  type: '0' | '1' | '2';
 
   @Column({
     type: DataType.INTEGER({ length: 11 }),
@@ -63,10 +69,12 @@ export class MenuModel extends Model<MenuModel> {
   children: MenuModel[];
 
   @Column({
-    type: DataType.STRING(50),
-    comment: '菜单图标',
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+    comment: '是否隐藏',
   })
-  icon: string;
+  hidden: boolean;
 
   @Column({
     type: DataType.BOOLEAN,
@@ -77,16 +85,9 @@ export class MenuModel extends Model<MenuModel> {
   enable: boolean;
 
   @Column({
-    type: DataType.STRING(50),
-    comment: '按钮权限',
+    comment: '权限名称',
   })
-  button_auth: string;
-
-  @Column({
-    type: DataType.STRING(50),
-    comment: '菜单权限',
-  })
-  menu_auth: string;
+  permission_name: string;
 
   @CreatedAt
   created_at?: Date;

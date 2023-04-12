@@ -1,10 +1,9 @@
-import { Inject, Controller, Get } from '@midwayjs/core';
+import { Inject, Controller, Get, Post, Body } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { createResponse } from '../../utils/response';
-import { ErrorCode } from '../../types/response/code.error';
-import { ErrorMessage } from '../../types/response/message.error';
 import { MenuService } from '../../service/admin/menu.service';
-// import { Permission } from '../../decorator/permission.decorator';
+import { Permission } from '../../decorator/permission.decorator';
+import { CreateMenuDTO, UpdateMenuDTO } from '../../dto/admin/menu.dto';
 
 @Controller('/api/admin/menu')
 export class MenuController {
@@ -15,19 +14,34 @@ export class MenuController {
   menuService: MenuService;
 
   @Get('/list')
-  // @Permission('access_login')
+  @Permission('menu:list')
   async getMenuList() {
-    const user = await this.menuService.getMenuList();
+    const menu = await this.menuService.getMenuList();
 
-    if (!user) {
-      return createResponse(
-        user,
-        false,
-        ErrorCode.USER_NOT_FOUND,
-        ErrorMessage[ErrorCode.USER_NOT_FOUND]
-      );
-    }
+    return createResponse(menu);
+  }
 
-    return createResponse(user);
+  @Post('/add')
+  @Permission('menu:add')
+  async addMenu(@Body() body: CreateMenuDTO) {
+    const menu = await this.menuService.addMenu(body);
+
+    return createResponse(menu);
+  }
+
+  @Post('/edit')
+  @Permission('menu:edit')
+  async editMenu(@Body() body: UpdateMenuDTO) {
+    const menu = await this.menuService.editMenu(body);
+
+    return createResponse(menu);
+  }
+
+  @Post('/delete')
+  @Permission('menu:delete')
+  async deleteMenu(@Body() body: { id: number }) {
+    const menu = await this.menuService.deleteMenu(body.id);
+
+    return createResponse(menu);
   }
 }
