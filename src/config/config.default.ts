@@ -12,10 +12,10 @@ export default {
     dataSource: {
       // 第一个数据源，数据源的名字可以完全自定义
       default: {
-        username: 'root',
-        password: 'wangyafei1007!',
+        username: 'jingyun_server',
+        password: 'YxDCtFHf72YR4cLE',
         database: 'jingyun_server',
-        host: 'localhost',
+        host: '101.35.189.229',
         port: 3306,
         encrypt: false,
         dialect: 'mysql',
